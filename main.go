@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"net/http"
+
+	"github.com/spf13/viper"
 
 	"godemo/config"
 	"godemo/model"
@@ -28,18 +29,22 @@ func NewRouters(routers router.Routers) *httprouter.Router {
 }
 
 func main() {
+	// Read command line parmeter
 	pflag.Parse()
 
+	// Load router
 	allRouters := router.AllRouters()
 	router := NewRouters(allRouters)
 
+	// Load configuration file
 	if err := config.Init(*cfg); err != nil {
 		log.Fatalf("Load config fail")
 	}
 
-	// 初始化数据库
+	// Init database
 	model.Init()
 
+	// start http serser
 	err := http.ListenAndServe(viper.GetString("port"), router)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
