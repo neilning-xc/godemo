@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/spf13/viper"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -12,7 +14,7 @@ import (
 var Db *gorm.DB
 
 func Init() {
-	Db = SetUpDB("homestead", "password", "192.168.10.10:3306", "db_godemo")
+	Db = SetUpDB(viper.GetString("db.username"), viper.GetString("db.password"), viper.GetString("db.host"), viper.GetString("db.name"))
 	Migrate(Db)
 }
 
