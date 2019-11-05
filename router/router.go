@@ -16,9 +16,12 @@ func Load(g *gin.Engine) *gin.Engine {
 		c.String(http.StatusMethodNotAllowed, "Method not allowed")
 	})
 
+	//g.GET("/login", user.Login)
+
 	v1 := g.Group("/v1")
 	{
 		v1.GET("/user", user.List)
+		v1.POST("/user", user.Create)
 	}
 
 	return g

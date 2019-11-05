@@ -10,3 +10,7 @@ func ListUser() ([]*model.User, error) {
 
 	return users, nil
 }
+
+func CreateUser(user *model.User) error {
+	return model.DB.Self.Create(user).Error
+}

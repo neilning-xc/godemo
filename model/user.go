@@ -9,7 +9,7 @@ type User struct {
 	Username  string `gorm:"size:255"`
 	Password  string `gorm:"size:255"`
 	Email     string `gorm:"type:varchar(100);unique_index"`
-	Brithday  *time.Time
+	Birthday  *time.Time
 	Gender    uint64
 	CreatedAt time.Time
 	UpdatedAt time.Time
