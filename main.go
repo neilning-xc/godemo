@@ -35,8 +35,8 @@ func main() {
 	router.Load(g)
 
 	// Init database
-	model.Init()
-	defer model.CloseDB()
+	model.DB.Init()
+	defer model.DB.CloseDB()
 
 	// start http serser
 	log.Infof("Starting listening requests on http server: %s", viper.GetString("url"))

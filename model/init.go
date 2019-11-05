@@ -11,12 +11,24 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-// 声明DB为全局变量
-var Db *gorm.DB
+type DataBase struct {
+	Self *gorm.DB
+}
 
-func Init() {
-	Db = SetUpDB(viper.GetString("db.username"), viper.GetString("db.password"), viper.GetString("db.host"), viper.GetString("db.name"))
-	Migrate(Db)
+// 声明DB为全局变量
+var (
+	DB *DataBase
+)
+
+func (db *DataBase) Init() {
+	DB = &DataBase{
+		Self: SetUpDB(viper.GetString("db.username"),
+			viper.GetString("db.password"),
+			viper.GetString("db.host"),
+			viper.GetString("db.name")),
+	}
+
+	Migrate(DB.Self)
 }
 
 func Migrate(db *gorm.DB) {
@@ -25,7 +37,6 @@ func Migrate(db *gorm.DB) {
 }
 
 func SetUpDB(username, password, addr, name string) *gorm.DB {
-
 	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s",
 		username,
 		password,
@@ -47,6 +58,6 @@ func SetUpDB(username, password, addr, name string) *gorm.DB {
 	return db
 }
 
-func CloseDB() {
-	Db.Close()
+func (db *DataBase) CloseDB() {
+	DB.Self.Close()
 }
