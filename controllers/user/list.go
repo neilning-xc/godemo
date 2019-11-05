@@ -4,16 +4,16 @@ import (
 	. "godemo/controllers"
 	"godemo/model"
 	"godemo/service"
-	"log"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/gin-gonic/gin"
+	"github.com/lexkong/log"
 )
 
-func List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func List(c *gin.Context) {
 	users, err := service.ListUser()
 	if err != nil {
-		log.Fatal("List user error")
+		log.Fatalf(err, "List user error")
 	}
 
 	results := make([]*model.UserInfo, 0)
@@ -28,5 +28,5 @@ func List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		})
 	}
 
-	SendJSONResponse(w, results)
+	SendJSONResponse(c, http.StatusOK, results)
 }

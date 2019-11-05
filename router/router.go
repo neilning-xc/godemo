@@ -2,28 +2,24 @@ package router
 
 import (
 	"godemo/controllers/user"
+	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/gin-gonic/gin"
 )
 
-type Route struct {
-	Name        string
-	Method      string
-	Path        string
-	HandlerFunc httprouter.Handle
-}
+func Load(g *gin.Engine) *gin.Engine {
+	g.NoRoute(func(c *gin.Context) {
+		c.String(http.StatusNotFound, "Url does't exist")
+	})
 
-type Routers []Route
+	g.NoMethod(func(c *gin.Context) {
+		c.String(http.StatusMethodNotAllowed, "Method not allowed")
+	})
 
-func AllRouters() Routers {
-	routers := Routers{
-		Route{
-			Name:        "user.list",
-			Method:      "GET",
-			Path:        "/user",
-			HandlerFunc: user.List,
-		},
+	v1 := g.Group("/v1")
+	{
+		v1.GET("/user", user.List)
 	}
 
-	return routers
+	return g
 }

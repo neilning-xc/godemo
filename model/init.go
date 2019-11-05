@@ -2,7 +2,8 @@ package model
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/lexkong/log"
 
 	"github.com/spf13/viper"
 
@@ -36,8 +37,16 @@ func SetUpDB(username, password, addr, name string) *gorm.DB {
 
 	db, err := gorm.Open("mysql", config)
 	if err != nil {
-		log.Fatalf("DB setup fail")
+		log.Fatalf(err, "DB setup fail")
 	}
 
+	db.LogMode(viper.GetBool("gormlog"))
+	// db.DB().SetMaxOpenConns(20000)
+	db.DB().SetMaxIdleConns(0)
+
 	return db
+}
+
+func CloseDB() {
+	Db.Close()
 }

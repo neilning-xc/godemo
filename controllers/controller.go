@@ -1,8 +1,7 @@
 package controllers
 
 import (
-	"encoding/json"
-	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {
@@ -11,14 +10,7 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-func SendJSONResponse(w http.ResponseWriter, data interface{}) {
-
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-
-	response := Response{Code: http.StatusOK, Message: "success", Data: data}
-
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		panic(err)
-	}
+func SendJSONResponse(c *gin.Context, code int, data interface{}) {
+	response := Response{Code: code, Message: "success", Data: data}
+	c.JSON(code, response)
 }

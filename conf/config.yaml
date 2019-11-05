@@ -1,6 +1,19 @@
 port: ":8080"
+url: "127.0.0.1:8080"
+gormlog: true
+
 db:
   host: "127.0.0.1:3306"
   username: "root"
   password: "root"
   name: "db_godemo"
+
+log:
+  writers: file,stdout
+  logger_level: DEBUG
+  logger_file: log/apiserver.log
+  log_format_text: false
+  rollingPolicy: daily
+  log_rotate_date: 1
+  log_rotate_size: 1
+  log_backup_count: 7
