@@ -1,35 +1,40 @@
 package user
 
 import (
-	"time"
 	. "godemo/controllers"
+	"godemo/pkg/auth"
 	"net/http"
+	"time"
 
-	"github.com/gin-gonic/gin"
 	"godemo/model"
 	"godemo/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type CreateRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
-	Birthday *time.Time `json:"birthday"`
+	Birthday string `json:"birthday"`
+	Gender   int8   `json:"gender"`
 }
 
 func Create(c *gin.Context) {
 	var r CreateRequest
 	if err := c.Bind(&r); err != nil {
-		SendJSONResponse(c, http.StatusUnprocessableEntity, "Parameter error")
+		SendJSONResponse(c, http.StatusBadRequest, nil)
 		return
 	}
 
-	user := model.User{Username: r.Username, Password: r.Password, Email: r.Email, Birthday: r.Birthday}
+	birthday, _ := time.Parse("2006-01-02 15:04:05", r.Birthday)
+	password, _ := auth.Encrypt(r.Password)
+	user := model.User{Username: r.Username, Password: password, Email: r.Email, Birthday: &birthday, Gender: r.Gender}
 
 	if service.CreateUser(&user) != nil {
-		SendJSONResponse(c, http.StatusOK, "Create fail")
+		SendJSONResponse(c, http.StatusInternalServerError, nil)
 		return
 	}
 
-	SendJSONResponse(c, http.StatusOK, user)
+	SendJSONResponse(c, http.StatusCreated, user)
 }

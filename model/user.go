@@ -10,7 +10,7 @@ type User struct {
 	Password  string `gorm:"size:255"`
 	Email     string `gorm:"type:varchar(100);unique_index"`
 	Birthday  *time.Time
-	Gender    uint64
+	Gender    int8
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`
