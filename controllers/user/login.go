@@ -39,6 +39,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	tokenString, _ := token.Sign(c, token.Context{Username: user.Username, Email: user.Email})
+	tokenString, _ := token.Sign(token.Context{Username: user.Username, Email: user.Email})
 	SendJSONResponse(c, http.StatusOK, TokenResponse{Token: tokenString})
 }
