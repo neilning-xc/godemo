@@ -3,6 +3,7 @@ package user
 import (
 	. "godemo/controllers"
 	"godemo/pkg/auth"
+	"godemo/pkg/token"
 	"net/http"
 
 	"godemo/model"
@@ -13,6 +14,10 @@ import (
 type LoginRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type TokenResponse struct {
+	Token string `json:"token"`
 }
 
 func Login(c *gin.Context) {
@@ -32,5 +37,7 @@ func Login(c *gin.Context) {
 	if auth.ComparePassword(user.Password, req.Password) != nil {
 		SendJSONResponse(c, http.StatusNoContent, nil)
 	}
-	SendJSONResponse(c, http.StatusOK, model.UserInfo{Username: user.Username, Email: user.Email})
+
+	tokenString, _ := token.Sign(token.Context{Username: user.Username, Email: user.Email})
+	SendJSONResponse(c, http.StatusOK, TokenResponse{Token: tokenString})
 }

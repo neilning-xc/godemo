@@ -1,6 +1,7 @@
 port: ":8080"
 url: "127.0.0.1:8080"
 gormlog: true
+jwt_secret: "12asdfjhlasdf" 
 
 db:
   host: "127.0.0.1:3306"
