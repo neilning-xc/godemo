@@ -51,7 +51,7 @@ func Parse(tokenString, jwtSecret string) (*Context, error) {
 }
 
 func ParseRequest(c *gin.Context) (*Context, error) {
-	header := c.Request.Header.Get("Authoirzation")
+	header := c.Request.Header.Get("Authorization")
 
 	if len(header) == 0 {
 		return &Context{}, errors.New("No Authrization")
