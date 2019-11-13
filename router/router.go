@@ -8,7 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Load(g *gin.Engine) *gin.Engine {
+func Load(g *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Engine {
+	g.Use(middlewares...)
+
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "Url does't exist")
 	})
@@ -21,6 +23,7 @@ func Load(g *gin.Engine) *gin.Engine {
 
 	v1 := g.Group("/v1")
 	v1.Use(middleware.Auth())
+
 	{
 		v1.GET("/user", user.List)
 		v1.POST("/user", user.Create)

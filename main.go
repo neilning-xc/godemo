@@ -9,6 +9,7 @@ import (
 	"godemo/config"
 	"godemo/model"
 	"godemo/router"
+	"godemo/router/middleware"
 
 	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
@@ -32,7 +33,7 @@ func main() {
 	g := gin.Default()
 
 	// Load router
-	router.Load(g)
+	router.Load(g, middleware.RequestId())
 
 	// Init database
 	model.DB.Init()
