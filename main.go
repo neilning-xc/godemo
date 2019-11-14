@@ -33,7 +33,7 @@ func main() {
 	g := gin.Default()
 
 	// Load router
-	router.Load(g, middleware.RequestId())
+	router.Load(g, middleware.Logging(), middleware.RequestId())
 
 	// Init database
 	model.DB.Init()
